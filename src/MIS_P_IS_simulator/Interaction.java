@@ -9,13 +9,13 @@ public class Interaction {
 	public static void interaction(Agent x, Agent y){
 		//lid更新プロセス
 		//どっちかがIIn空のとき
-		if (x.IIn == null || (x.IIn.var == y.IIn.var && x.IIn.hop > y.IIn.hop+1)) {	//xのIInが書き換えられる 
+		if ((x.IIn == null && y.IIn!=null) || ((x.IIn != null && y.IIn != null) && (x.IIn.var == y.IIn.var && x.IIn.hop > y.IIn.hop+1)) ) {	//xのIInが書き換えられる 
 			x.IIn = new InfoIndependentNode();
 			x.IIn.var = y.IIn.var;
 			x.IIn.hop = y.IIn.hop + 1;
 			x.IIn.timer_IIn = y.IIn.timer_IIn;
 		}
-		if (y.IIn == null || (y.IIn.var == x.IIn.var && y.IIn.hop > x.IIn.hop+1)) {	//yのIInが書き換えられる 
+		if ((y.IIn == null && x.IIn!=null) || ((y.IIn != null && x!= null) &&(y.IIn.var == x.IIn.var && y.IIn.hop > x.IIn.hop+1)) ) {	//yのIInが書き換えられる 
 			y.IIn = new InfoIndependentNode();
 			y.IIn.var = x.IIn.var;
 			y.IIn.hop = x.IIn.hop + 1;
@@ -47,7 +47,6 @@ public class Interaction {
 					y.IIn.timer_IIn = x.IIn.timer_IIn;
 				}
 			}
-		}
 		
 		//falseなInと嘘の独立ノード(削除された独立ノードの情報)を消す 
 //			if (x.IIn.var == y.IIn.var) {
@@ -55,11 +54,11 @@ public class Interaction {
 //			}
 			//IInの独立ノードと交流したらtimer_IInをリセット
 			if (x.IIn.var == y.IIn.var && (x.IsIndependentNode()||y.IsIndependentNode()) ) { x.IIn.timer_IIn = y.IIn.timer_IIn =  MIS_P_IS_simulator.t_max; }
-			else if (x.IIn.var != y.IIn.var) { x.IIn.timer_IIn--; y.IIn.timer_IIn--; }	//IInのidが違うときは不安度が増していく
+			else if (x.IIn.var != y.IIn.var) { x.IIn.timer_IIn = max(x.IIn.timer_IIn-1, 0); y.IIn.timer_IIn = max(y.IIn.timer_IIn-1, 0); }	//IInのidが違うときは不安度が増していく
 			//タイムアウトしたらIInの情報を忘れる
 			if (x.IIn.timer_IIn == 0) { x.IIn = null; }
 			if (y.IIn.timer_IIn == 0) { y.IIn = null; }
-		
+		}
 		
 //		//Inを減らすためのプロセス(k-hop以内にInが存在し，idがそれより低ければ，降りる)
 //		if (x.IIn != null && y.IIn !=null) {
