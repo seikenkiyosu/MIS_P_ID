@@ -54,6 +54,7 @@ public class Interaction {
 //			}
 			//IInの独立ノードと交流したらtimer_IInをリセット
 			if (x.IIn.var == y.IIn.var && (x.IsIndependentNode()||y.IsIndependentNode()) ) { x.IIn.timer_IIn = y.IIn.timer_IIn =  MIS_P_IS_simulator.t_max; }
+			else if (x.IIn.var == y.IIn.var) { x.IIn.timer_IIn = y.IIn.timer_IIn = max(x.IIn.timer_IIn-1, y.IIn.timer_IIn-1, 0); }
 			else if (x.IIn.var != y.IIn.var) { x.IIn.timer_IIn = max(x.IIn.timer_IIn-1, 0); y.IIn.timer_IIn = max(y.IIn.timer_IIn-1, 0); }	//IInのidが違うときは不安度が増していく
 			//タイムアウトしたらIInの情報を忘れる
 			if (x.IIn.timer_IIn == 0) { x.IIn = null; }

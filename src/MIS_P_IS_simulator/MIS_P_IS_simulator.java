@@ -8,13 +8,13 @@ import Agent.Agent;
 
 public class MIS_P_IS_simulator {
 	//k-極大独立集合問題
-	public static final int k = 4;
+	public static final int k = 1;
 	
 	//個体数
-	public static final int n = 1000;
+	public static final int n = 900;
 	
 	//タイマを決めるための定数
-	public static final int N = 1500;		//個体数上限
+	public static final int N = 1000;		//個体数上限
 	public static final int DELTA = 4;		//最大次数の上限
 	public static final int t_max = 8*N*DELTA;
 	
@@ -104,8 +104,8 @@ public class MIS_P_IS_simulator {
 //				if (agent[i*(int )Math.sqrt(n)+j].IIn != null) {
 //					System.out.print(agent[i*(int )Math.sqrt(n)+j].IIn.var + " " + agent[i*(int )Math.sqrt(n)+j].IIn.hop + " " + agent[i*(int )Math.sqrt(n)+j].IIn.timer_IIn);
 //				}
-//				if (agent[i*(int )Math.sqrt(n)+j].IsIndependentNode()) System.out.print("●\t");
-//				else System.out.print("○\t");
+//				if (agent[i*(int )Math.sqrt(n)+j].IsIndependentNode()) System.out.print("■\t");
+//				else System.out.print("□\t");
 //			}
 			System.out.print("\n");
 //			if(i!=(int )Math.sqrt(n)-1) { for (int j = 0; j < (int )Math.sqrt(n); j++) System.out.print("｜\t\t"); System.out.print("\n");}
