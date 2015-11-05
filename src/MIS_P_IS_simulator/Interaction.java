@@ -8,6 +8,9 @@ import Agent.InfoIndependentNode;
 public class Interaction {
 	public static void interaction(Agent x, Agent y){
 		//lid更新プロセス
+		//初期状況で独立ノードだったときにhop数0となっていないときの
+		if (x.IsIndependentNode()) {x.IIn.hop = 0; x.IIn.timer_IIn = MIS_P_IS_simulator.t_max;}
+		if (y.IsIndependentNode()) {y.IIn.hop = 0; y.IIn.timer_IIn = MIS_P_IS_simulator.t_max;}
 		//どっちかがIIn空のとき
 		if ((x.IIn == null && y.IIn!=null) || ((x.IIn != null && y.IIn != null) && (x.IIn.var == y.IIn.var && x.IIn.hop > y.IIn.hop+1)) ) {	//xのIInが書き換えられる 
 			x.IIn = new InfoIndependentNode();
@@ -22,6 +25,7 @@ public class Interaction {
 			y.IIn.timer_IIn = x.IIn.timer_IIn;
 		}
 		//両方IInが空でないとき
+		
 		if (x.IIn != null && y.IIn !=null) {	//両方nullなら意味ない
 			if (x.IIn.hop + y.IIn.hop + 1 <= MIS_P_IS_simulator.k) {	//hop数の和がk以下のとき
 				if (x.IIn.var > y.IIn.var) {
@@ -50,15 +54,27 @@ public class Interaction {
 		
 		//falseなInと嘘の独立ノード(削除された独立ノードの情報)を消す 
 //			if (x.IIn.var == y.IIn.var) {
-				x.IIn.timer_IIn = y.IIn.timer_IIn = max(x.IIn.timer_IIn-1, y.IIn.timer_IIn-1, 0);
+//				x.IIn.timer_IIn = y.IIn.timer_IIn = max(x.IIn.timer_IIn-1, y.IIn.timer_IIn-1, 0);
 //			}
 			//IInの独立ノードと交流したらtimer_IInをリセット
-			if (x.IIn.var == y.IIn.var && (x.IsIndependentNode()||y.IsIndependentNode()) ) { x.IIn.timer_IIn = y.IIn.timer_IIn =  MIS_P_IS_simulator.t_max; }
-			else if (x.IIn.var == y.IIn.var) { x.IIn.timer_IIn = y.IIn.timer_IIn = max(x.IIn.timer_IIn-1, y.IIn.timer_IIn-1, 0); }
-			else if (x.IIn.var != y.IIn.var) { x.IIn.timer_IIn = max(x.IIn.timer_IIn-1, 0); y.IIn.timer_IIn = max(y.IIn.timer_IIn-1, 0); }	//IInのidが違うときは不安度が増していく
+			if (x.IIn.var == y.IIn.var && (x.IsIndependentNode()||y.IsIndependentNode())) {
+				x.IIn.timer_IIn = y.IIn.timer_IIn =  MIS_P_IS_simulator.t_max; 
+			}
+			else if (x.IIn.var == y.IIn.var) {
+				x.IIn.timer_IIn = y.IIn.timer_IIn = max(x.IIn.timer_IIn-1, y.IIn.timer_IIn-1, 0);
+				if (x.IIn.hop == 0) { x.IIn = null; }
+				if (y.IIn.hop == 0) { y.IIn = null; }
+			}
+			else if (x.IIn.var != y.IIn.var) { 
+				x.IIn.timer_IIn = max(x.IIn.timer_IIn-1, 0); y.IIn.timer_IIn = max(y.IIn.timer_IIn-1, 0);
+			}	//IInのidが違うときは不安度が増していく
 			//タイムアウトしたらIInの情報を忘れる
-			if (x.IIn.timer_IIn == 0) { x.IIn = null; }
-			if (y.IIn.timer_IIn == 0) { y.IIn = null; }
+			if (x.IIn != null && x.IIn.timer_IIn == 0) {
+				x.IIn = null;
+			}
+			if (y.IIn != null && y.IIn.timer_IIn == 0) {
+				y.IIn = null;
+			}
 		}
 		
 //		//Inを減らすためのプロセス(k-hop以内にInが存在し，idがそれより低ければ，降りる)

@@ -7,14 +7,17 @@ import java.util.Random;
 import Agent.Agent;
 
 public class MIS_P_IS_simulator {
+	public static final boolean LookData = false;
+//	public static final boolean LookData = true;
+
 	//k-極大独立集合問題
 	public static final int k = 1;
 	
 	//個体数
-	public static final int n = 900;
+	public static final int n = 400;
 	
 	//タイマを決めるための定数
-	public static final int N = 1000;		//個体数上限
+	public static final int N = 400;		//個体数上限
 	public static final int DELTA = 4;		//最大次数の上限
 	public static final int t_max = 8*N*DELTA;
 	
@@ -33,6 +36,7 @@ public class MIS_P_IS_simulator {
 		
 		//作業用変数
 //		long CT = 0;
+		
 //		boolean CT_count_flag = true;
 //		long HT = 0;
 //		boolean HT_count_flag = false;
@@ -44,7 +48,12 @@ public class MIS_P_IS_simulator {
 		
 		while (true) {
 //		for (int i = 0; i < 1000000; i++) {
-			if (!LastOneIsSameConfiguration(lastconfiguration, agent)) {
+			if (!LookData) {
+				if (!LastOneIsSameConfiguration(lastconfiguration, agent)) {
+					ShowConfiguration(agent);
+				}
+			}
+			else {
 				ShowConfiguration(agent);
 			}
 			
@@ -95,18 +104,22 @@ public class MIS_P_IS_simulator {
 	
 	private static void ShowConfiguration (Agent agent[]) {
 		for (int i = 0; i < (int )Math.sqrt(n); i++) {
-			for (int j = 0; j < (int )Math.sqrt(n); j++) {
-				if (agent[i*(int )Math.sqrt(n)+j].IsIndependentNode()) System.out.print("■ ");
-				else System.out.print("□ ");
-//				if (j!=(int )Math.sqrt(n)-1){ System.out.print("\tー\t"); }
+			if (!LookData) {
+				for (int j = 0; j < (int )Math.sqrt(n); j++) {
+					if (agent[i*(int )Math.sqrt(n)+j].IsIndependentNode()) System.out.print("■ ");
+					else System.out.print("□ ");
+	//				if (j!=(int )Math.sqrt(n)-1){ System.out.print("\tー\t"); }
+				}
 			}
-//			for (int j = 0; j < (int )Math.sqrt(n); j++) {
-//				if (agent[i*(int )Math.sqrt(n)+j].IIn != null) {
-//					System.out.print(agent[i*(int )Math.sqrt(n)+j].IIn.var + " " + agent[i*(int )Math.sqrt(n)+j].IIn.hop + " " + agent[i*(int )Math.sqrt(n)+j].IIn.timer_IIn);
-//				}
-//				if (agent[i*(int )Math.sqrt(n)+j].IsIndependentNode()) System.out.print("■\t");
-//				else System.out.print("□\t");
-//			}
+			else {
+				for (int j = 0; j < (int )Math.sqrt(n); j++) {
+					if (agent[i*(int )Math.sqrt(n)+j].IIn != null) {
+						System.out.print(agent[i*(int )Math.sqrt(n)+j].IIn.var + " " + agent[i*(int )Math.sqrt(n)+j].IIn.hop + " " + agent[i*(int )Math.sqrt(n)+j].IIn.timer_IIn);
+					}
+					if (agent[i*(int )Math.sqrt(n)+j].IsIndependentNode()) System.out.print("■\t");
+					else System.out.print("□\t");
+				}
+			}
 			System.out.print("\n");
 //			if(i!=(int )Math.sqrt(n)-1) { for (int j = 0; j < (int )Math.sqrt(n); j++) System.out.print("｜\t\t"); System.out.print("\n");}
 		}

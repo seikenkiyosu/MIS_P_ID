@@ -22,10 +22,17 @@ public class Agent {
 		this.timer_IS = random.nextInt(MIS_P_IS_simulator.t_max);
 		
 		//IIn初期化
-		this.IIn = null;
+		this.IIn = new InfoIndependentNode();
+		this.IIn.var = this.var;
+//		this.IIn.var = random.nextInt(MIS_P_IS_simulator.IDMAX);
+		this.IIn.hop = random.nextInt(MIS_P_IS_simulator.n);
+		this.IIn.timer_IIn = random.nextInt(MIS_P_IS_simulator.t_max);
 //		if (random.nextBoolean()) {
 //			this.IIn = new InfoIndependentNode();
-//			this.IIn.var = this.var;
+////			this.IIn.var = this.var;
+//			this.IIn.var = random.nextInt(MIS_P_IS_simulator.IDMAX);
+//			this.IIn.hop = random.nextInt(MIS_P_IS_simulator.n);
+//			this.IIn.timer_IIn = random.nextInt(MIS_P_IS_simulator.t_max);
 //		}
 //		else {
 //			this.IIn = null;

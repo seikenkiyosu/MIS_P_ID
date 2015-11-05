@@ -26,10 +26,12 @@ public class Graph {
 			case TORUS  :	//Delta = 4
 				for (int i = 0; i < n; i++) for (int j = 0; j < n; j++) { List[i][j] = false; }
 				for (int i = 0; i < n; i++){
-					List[(i+1+n)%n][i] = true;
-					List[(i-1+n)%n][i] = true;
-					List[((i+n+(int)Math.sqrt(n)))%n][i] = true;
-					List[((i+n-(int)Math.sqrt(n)))%n][i] = true;
+					if (i % (int)Math.sqrt(n) != 0) List[(i-1+n)%n][i] = true;
+					else { List[i+(int)Math.sqrt(n)-1][i] = true; }
+					if (i % (int)Math.sqrt(n) != (int)Math.sqrt(n)-1) List[(i+1+n)%n][i] = true;
+					else { List[i-(int)Math.sqrt(n)+1][i] = true; }
+					List[(i+(int)Math.sqrt(n)+n)%n][i] = true;
+					List[(i-(int)Math.sqrt(n)+n)%n][i] = true;
 				}
 				break;
 			case LINEAR :	//Delta = 2
