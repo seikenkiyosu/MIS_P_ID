@@ -1,5 +1,6 @@
 package MIS_P_IS_simulator;
 
+import java.lang.reflect.Method;
 //import java.util.LinkedList;
 //import java.util.Queue;
 import java.util.Random;
@@ -7,19 +8,23 @@ import java.util.Random;
 import Agent.Agent;
 
 public class MIS_P_IS_simulator {
+//	public static final boolean LookData = false;
 	public static final boolean LookData = false;
-//	public static final boolean LookData = true;
 
+	//ネットワーク
+	public static final int METHOD = Graph.GRID;
+	
 	//k-極大独立集合問題
 	public static final int k = 1;
 	
 	//個体数
-	public static final int n = 400;
+	public static final int n = 900;
 	
 	//タイマを決めるための定数
-	public static final int N = 400;		//個体数上限
+	public static final int N = 1000;		//個体数上限
+	
 	public static final int DELTA = 4;		//最大次数の上限
-	public static final int t_max = 8*N*DELTA;
+	public static final int t_max = N*DELTA;
 	
 	public static final int IDMAX = N;		//IDの上限
 	public static Boolean idlist[];
@@ -27,7 +32,7 @@ public class MIS_P_IS_simulator {
 	public static void main (String args[]) {
 		//初期化
 		
-		Graph graph = new Graph(n, Graph.TORUS);
+		Graph graph = new Graph(n, METHOD);
 		idlist = new Boolean[IDMAX];
 		for (int i = 0; i < IDMAX; i++) idlist[i] = false;
 		Agent[] agent = new Agent[n];
@@ -114,10 +119,11 @@ public class MIS_P_IS_simulator {
 			else {
 				for (int j = 0; j < (int )Math.sqrt(n); j++) {
 					if (agent[i*(int )Math.sqrt(n)+j].IIn != null) {
-						System.out.print(agent[i*(int )Math.sqrt(n)+j].IIn.var + " " + agent[i*(int )Math.sqrt(n)+j].IIn.hop + " " + agent[i*(int )Math.sqrt(n)+j].IIn.timer_IIn);
+//						System.out.printf("%2d %2d %2d %4d", agent[i*(int )Math.sqrt(n)+j].var, agent[i*(int )Math.sqrt(n)+j].IIn.var, agent[i*(int )Math.sqrt(n)+j].IIn.hop, agent[i*(int )Math.sqrt(n)+j].IIn.timer_IIn);
+						System.out.printf("%2d %2d %4d", agent[i*(int )Math.sqrt(n)+j].IIn.var, agent[i*(int )Math.sqrt(n)+j].IIn.hop, agent[i*(int )Math.sqrt(n)+j].IIn.timer_IIn);
 					}
-					if (agent[i*(int )Math.sqrt(n)+j].IsIndependentNode()) System.out.print("■\t");
-					else System.out.print("□\t");
+					if (agent[i*(int )Math.sqrt(n)+j].IsIndependentNode()) System.out.print(" ■　\t");
+					else System.out.print(" □　\t");
 				}
 			}
 			System.out.print("\n");

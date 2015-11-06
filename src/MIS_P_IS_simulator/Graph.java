@@ -6,9 +6,10 @@ import java.util.Random;
 public class Graph {
 	//グラフを作る方法
 	public static final int 
-		TORUS  = 0,
-		LINEAR = 1,
-		RANDOM = 2;
+		GRID   = 0,
+		TORUS  = 1,
+		LINEAR = 2,
+		RANDOM = 3;
 
 	//メンバ
 	public int n;
@@ -23,6 +24,15 @@ public class Graph {
 		
 		//グラフの作り方
 		switch (MethodToGenerate) {
+			case GRID  :	//Delta = 4
+				for (int i = 0; i < n; i++) for (int j = 0; j < n; j++) { List[i][j] = false; }
+				for (int i = 0; i < n; i++){
+					if (i % (int)Math.sqrt(n) != 0) List[(i-1+n)%n][i] = true;
+					if (i % (int)Math.sqrt(n) != (int)Math.sqrt(n)-1) List[(i+1+n)%n][i] = true;
+					if (i < (int)Math.sqrt(n)*((int)Math.sqrt(n)-1))List[(i+(int)Math.sqrt(n)+n)%n][i] = true;
+					if (i >= (int)Math.sqrt(n)) List[(i-(int)Math.sqrt(n)+n)%n][i] = true;
+				}
+				break;
 			case TORUS  :	//Delta = 4
 				for (int i = 0; i < n; i++) for (int j = 0; j < n; j++) { List[i][j] = false; }
 				for (int i = 0; i < n; i++){
