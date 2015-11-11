@@ -80,9 +80,17 @@ public class Interaction {
 			//タイムアウトしたらIInの情報を忘れる
 			if (x.IIn != null && x.IIn.timer_IIn == 0) {
 				x.IIn = null;
+//				if (x.IIn == null) x.IIn = new InfoIndependentNode();
+//				x.IIn.var = x.var;
+//				x.IIn.hop = 0;
+//				x.IIn.timer_IIn = MIS_P_IS_simulator.t_max;
 			}
 			if (y.IIn != null && y.IIn.timer_IIn == 0) {
 				y.IIn = null;
+//				if (y.IIn == null) y.IIn = new InfoIndependentNode();
+//				y.IIn.var = y.var;
+//				y.IIn.hop = 0;
+//				y.IIn.timer_IIn = MIS_P_IS_simulator.t_max;
 			}
 		}	//両個体がnullでないときの処理終了
 		
@@ -119,6 +127,8 @@ public class Interaction {
 			y.IIn.hop = 0;
 			y.IIn.timer_IIn = MIS_P_IS_simulator.t_max;
 		}
+		
+		
 		if (x.IIn != null && y.IIn != null) {
 			if (x.IsIndependentNode()) {x.IIn.hop = 0; x.IIn.timer_IIn = MIS_P_IS_simulator.t_max;}
 			if (y.IsIndependentNode()) {y.IIn.hop = 0; y.IIn.timer_IIn = MIS_P_IS_simulator.t_max;}

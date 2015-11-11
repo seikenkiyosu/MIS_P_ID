@@ -1,37 +1,34 @@
 package MIS_P_IS_simulator;
 
-import java.lang.reflect.Method;
-//import java.util.LinkedList;
-//import java.util.Queue;
+import java.util.Date;
 import java.util.Random;
 
 import Agent.Agent;
 
 public class MIS_P_IS_simulator {
-//	public static final boolean LookData = false;
 	public static final boolean LookData = false;
 
 	//ネットワーク
 	public static final int METHOD = Graph.GRID;
 	
 	//k-極大独立集合問題
-	public static final int k = 1;
+	public static final int k = 7;
 	
 	//個体数
-	public static final int n = 900;
+	public static final int n = 625;
 	
 	//タイマを決めるための定数
-	public static final int N = 1000;		//個体数上限
+//	public static final int N = 900;		//個体数上限
 	
 	public static final int DELTA = 4;		//最大次数の上限
-	public static final int t_max = N*DELTA;
+	public static final int t_max = 8*k*DELTA;
 	
-	public static final int IDMAX = N;		//IDの上限
+	public static final int IDMAX = n+100;		//IDの上限
 	public static Boolean idlist[];
 	
 	public static void main (String args[]) {
-		//初期化
 		
+		//初期化
 		Graph graph = new Graph(n, METHOD);
 		idlist = new Boolean[IDMAX];
 		for (int i = 0; i < IDMAX; i++) idlist[i] = false;
@@ -55,11 +52,20 @@ public class MIS_P_IS_simulator {
 //		for (int i = 0; i < 1000000; i++) {
 			if (!LookData) {
 				if (!LastOneIsSameConfiguration(lastconfiguration, agent)) {
+					Date date = new Date();
+					System.out.println("k = " + k + "\t" + date.toString());
 					ShowConfiguration(agent);
 				}
 			}
 			else {
 				ShowConfiguration(agent);
+			}
+			
+			if (IsOver(graph, agent)) {
+				Date date = new Date();
+				System.out.println("k = " + k + "\t" + date.toString());
+				ShowConfiguration(agent);
+				break;
 			}
 			
 			//initiatorとresponderを決める
@@ -111,8 +117,12 @@ public class MIS_P_IS_simulator {
 		for (int i = 0; i < (int )Math.sqrt(n); i++) {
 			if (!LookData) {
 				for (int j = 0; j < (int )Math.sqrt(n); j++) {
-					if (agent[i*(int )Math.sqrt(n)+j].IsIndependentNode()) System.out.print("■ ");
-					else System.out.print("□ ");
+//					if (agent[i*(int )Math.sqrt(n)+j].IsIndependentNode()) System.out.print("🔶");
+//					else System.out.print("◻️");
+					if (agent[i*(int )Math.sqrt(n)+j].IsIndependentNode()) System.out.print("🔶\t");
+					else {
+						if (agent[i*(int )Math.sqrt(n)+j].IIn != null) System.out.printf("%2d\t", agent[i*(int )Math.sqrt(n)+j].IIn.hop);
+					}
 	//				if (j!=(int )Math.sqrt(n)-1){ System.out.print("\tー\t"); }
 				}
 			}
@@ -122,8 +132,8 @@ public class MIS_P_IS_simulator {
 //						System.out.printf("%2d %2d %2d %4d", agent[i*(int )Math.sqrt(n)+j].var, agent[i*(int )Math.sqrt(n)+j].IIn.var, agent[i*(int )Math.sqrt(n)+j].IIn.hop, agent[i*(int )Math.sqrt(n)+j].IIn.timer_IIn);
 						System.out.printf("%2d %2d %4d", agent[i*(int )Math.sqrt(n)+j].IIn.var, agent[i*(int )Math.sqrt(n)+j].IIn.hop, agent[i*(int )Math.sqrt(n)+j].IIn.timer_IIn);
 					}
-					if (agent[i*(int )Math.sqrt(n)+j].IsIndependentNode()) System.out.print(" ■　\t");
-					else System.out.print(" □　\t");
+					if (agent[i*(int )Math.sqrt(n)+j].IsIndependentNode()) System.out.print(" 🔶　\t");
+					else System.out.print(" ◻️　\t");
 				}
 			}
 			System.out.print("\n");
@@ -149,5 +159,24 @@ public class MIS_P_IS_simulator {
 				lastone[i][j] = agent[i*(int )Math.sqrt(n)+j].IsIndependentNode();
 			}
 		return lastoneissame ? true : false;
+	}
+	
+	private static boolean IsOver (Graph graph, Agent agent[]) {
+		for (int i = 0; i < n; i++) {
+			boolean flag = false;
+			if (agent[i].IIn == null) return false;
+			if (agent[i].IIn.hop > k) return false;
+			if (agent[i].IsIndependentNode()) continue;
+			for (int j = 0; j < n; j++) {
+				if (graph.List[i][j] && agent[j].IIn != null) {		//枝があれば
+					if (agent[j].IIn.var == agent[i].IIn.var && agent[j].IIn.hop == agent[i].IIn.hop-1) {
+						flag = true;
+						break;
+					}
+				}
+			}
+			if (!flag) return false;
+		}
+		return true;
 	}
 }
